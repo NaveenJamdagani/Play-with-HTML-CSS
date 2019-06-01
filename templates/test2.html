@@ -8,36 +8,61 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
   <style type="text/css"></style>
 </head>
 <body>
 
   <div class="container">
-    <div class="col-sm-6">
-        <h2>INPUT</h2>
-        <p id="myTextarea">
-        </p>      
-        <p id= "cssTextarea" style="display: none;"></p>
+    <div class="row">
+      <div class="col-sm-8 col-sm-offset-2">
+        <textarea id="input_md_file" style="width: 100%;height: 100px;border-radius: 5px;margin-top: 25px;background: #f3f6f8"></textarea>
+      </div>
     </div>
-    <div class="col-sm-6">
-      <h2>OUTPUT</h2><p class="output"></p>
+    <div class="row" id="output_page" style="display: none;">
+        <div class="col-sm-6">
+            <h2>INPUT</h2>
+            <p id="myTextarea">
+            </p>      
+            <p id= "cssTextarea" style="display: none;"></p>
+        </div>
+        <div class="col-sm-6">
+          <h2>OUTPUT</h2><p class="output"></p>
+        </div>
+        <div id="box"></div>
     </div>
-    <div id="box"></div>
   </div>
 <script type="text/javascript">
 $(document).ready(function(){
     let i = 0;
-    let txt = '<table><tr><th>Company</th><th>Contact</th><th>Country</th></tr><tr><td>Alfreds Futterkiste</td><td>Maria Anders</td><td>Germany</td></tr><tr><td>Centro comercial Moctezuma</td><td>Francisco Chang</td><td>Mexico</td></tr><tr><td>Ernst Handel</td><td>Roland Mendel</td><td>Austria</td></tr><tr><td>Island Trading</td><td>Helen Bennett</td><td>UK</td></tr><tr><td>Laughing Bacchus Winecellars</td><td>Yoshi Tannamuri</td><td>Canada</td></tr><tr><td>Magazzini Alimentari Riuniti</td><td>Giovanni Rovelli</td><td>Italy</td></tr></table><h2>CSS Layout Float</h2><p>In this example, we have created a header, two columns/boxes and a footer. On smaller screens, the columns will stack on top of each other.</p><p>Resize the browser window to see the responsive effect (you will learn more about this in our next chapter - HTML Responsive.)</p><header><h2>Cities</h2></header><section><nav><ul><li><a href="#">London</a></li><li><a href="#">Paris</a></li><li><a href="#">Tokyo</a></li></ul></nav><article><h1>London</h1><p>London is the capital city of England. It is the most populous city in the  United Kingdom, with a metropolitan area of over 13 million inhabitants.</p><p>Standing on the River Thames, London has been a major settlement for two millennia, its history going back to its founding by the Romans, who named it Londinium.</p></article></section><footer><p>Footer</p></footer>';
-    let speed = 5;
+    let html = '<table><tr><th>Company</th><th>Contact</th><th>Country</th></tr><tr><td>Alfreds Futterkiste</td><td>Maria Anders</td><td>Germany</td></tr><tr><td>Centro comercial Moctezuma</td><td>Francisco Chang</td><td>Mexico</td></tr><tr><td>Ernst Handel</td><td>Roland Mendel</td><td>Austria</td></tr><tr><td>Island Trading</td><td>Helen Bennett</td><td>UK</td></tr><tr><td>Laughing Bacchus Winecellars</td><td>Yoshi Tannamuri</td><td>Canada</td></tr><tr><td>Magazzini Alimentari Riuniti</td><td>Giovanni Rovelli</td><td>Italy</td></tr></table><h2>CSS Layout Float</h2><p>In this example, we have created a header, two columns/boxes and a footer. On smaller screens, the columns will stack on top of each other.</p><p>Resize the browser window to see the responsive effect (you will learn more about this in our next chapter - HTML Responsive.)</p><header><h2>Cities</h2></header><section><nav><ul><li><a href="#">London</a></li><li><a href="#">Paris</a></li><li><a href="#">Tokyo</a></li></ul></nav><article><h1>London</h1><p>London is the capital city of England. It is the most populous city in the  United Kingdom, with a metropolitan area of over 13 million inhabitants.</p><p>Standing on the River Thames, London has been a major settlement for two millennia, its history going back to its founding by the Romans, who named it Londinium.</p></article></section><footer><p>Footer</p></footer>';
+    let speed = 1;
 
 
     let j = 0;
-    let abc = '';
+    let md_file = '';
+    let txt;
 
+    $(document).on("blur", "#input_md_file", function(e) {
+      // console.log(e);
+      if(e.type === 'focusout' || e.keyCode === 10 || e.keyCode === 13) {
+        let converter = new showdown.Converter();
+        let md = $('#input_md_file').val();
+        txt = converter.makeHtml(md);
+        htmlWriter();
+      }
 
-    htmlWriter();
+      else {
+        
+      }
+      
+    })
+
+    // console.log(html);
 
     function htmlWriter() {
+      $('#input_md_file').css('display','none');
+      $('#output_page').css('display','block');
       if (i < txt.length) {
         document.getElementById("myTextarea").innerHTML += txt.charAt(i);
         i++;
